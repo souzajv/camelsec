@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: var(--font-jetbrains), monospace;
+    background-color: #121a17;
+    transition: cursor 0.3s ease-in-out;
+}
+
+.subtle-neon {
+    text-shadow: 0 0 3px #00ffa1, 0 0 6px #00ffa1;
+}
