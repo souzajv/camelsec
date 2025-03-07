@@ -48,10 +48,10 @@ const Title = ({ setTriggerStart }: TitleProps) => {
             if (currentCharIndex >= currentWord.length) {
                 currentWordIndex++;
                 currentCharIndex = 0;
-                setTimeout(animateWord, 30);
+                setTimeout(animateWord, 37);
             } else {
                 currentCharIndex++;
-                setTimeout(animateWord, 30);
+                setTimeout(animateWord, 37);
             }
         };
 

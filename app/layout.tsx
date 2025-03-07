@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { JetBrains_Mono } from 'next/font/google';
-import BlobCursor from "./components/blobcursor";
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -25,7 +24,6 @@ export default function RootLayout({
         <div className="h-full w-full">
           {children}
         </div>
-        
       </body>
     </html >
   );

@@ -3,14 +3,21 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const Subtitle = () => {
+interface SubtitleProps {
+    className?: string;
+}
+
+const Subtitle: React.FC<SubtitleProps> = ({ className = "" }) => {
     const fullText = [
         "O", "parceiro", "de", "cibersegurança", "e", "tecnologia",
         "com", "a", "agilidade", "que", "seu", "negócio", "precisa",
         "e", "a", "facilidade", "de", "uma", "única", "assinatura."
     ];
 
-    const glitchWords = [1, 3, 5, 8, 10, 12, 16, 18]; // Índices das palavras com glitch
+    // 🔹 Apenas palavras específicas terão o efeito glitch
+    const glitchWords = ["parceiro", "cibersegurança", "tecnologia", "agilidade", "seu", "negócio", "precisa", "facilidade", "assinatura"];
+    const glitchIndices = fullText.map((word, index) => glitchWords.includes(word) ? index : -1).filter(index => index !== -1);
+
     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
 
     const [displayedText, setDisplayedText] = useState<string[]>([]);
@@ -48,10 +55,10 @@ const Subtitle = () => {
             if (currentCharIndex >= currentWord.length) {
                 currentWordIndex++;
                 currentCharIndex = 0;
-                setTimeout(animateWord, 30);
+                setTimeout(animateWord, 15);
             } else {
                 currentCharIndex++;
-                setTimeout(animateWord, 30);
+                setTimeout(animateWord, 15);
             }
         };
 
@@ -62,13 +69,13 @@ const Subtitle = () => {
     useEffect(() => {
         if (!animationFinished) return;
 
-        const glitchIntervals = glitchWords.map((index) =>
+        const glitchIntervals = glitchIndices.map((index) =>
             setInterval(() => {
                 setGlitchTriggers((prev) => {
                     const newTriggers = [...prev];
                     newTriggers[index] = true;
 
-                    // Após o glitch, a palavra ficará techGreen por 4,5s
+                    // Após o glitch, a palavra ficará techGreen por 1.5s
                     setTimeout(() => {
                         newTriggers[index] = false;
                         setGlitchTriggers([...newTriggers]);
@@ -81,7 +88,7 @@ const Subtitle = () => {
                             setTimeout(() => {
                                 newHighlight[index] = false;
                                 setHighlightTriggers([...newHighlight]);
-                            }, 4500); // TechGreen dura 4.5s
+                            }, 1500); // TechGreen dura 1.5s
 
                             return newHighlight;
                         });
@@ -89,7 +96,7 @@ const Subtitle = () => {
 
                     return newTriggers;
                 });
-            }, Math.random() * 4000 + 9000) // Frequência do glitch ajustada para ser mais espaçada (4s a 7s)
+            }, Math.random() * 2000 + 5000)
         );
 
         return () => glitchIntervals.forEach(clearInterval);
@@ -104,16 +111,17 @@ const Subtitle = () => {
             color: "#fff"
         },
         glitch: {
-            x: [0, -2, 2, -1, 1, 0],
+            x: [0, -2, 2, -1, 1, 0], // Pequenos deslocamentos aleatórios
             y: [0, 1, -1, 2, -2, 0],
+            color: ["#fff", "#00ffa1", "#fff"],
             textShadow: [
-                "0px 0px 3px rgba(255, 255, 255, 0.5)",
-                "1px -1px 8px rgba(255, 0, 0, 0.5)",
-                "-1px 1px 8px rgba(0, 255, 255, 0.5)",
-                "0px 0px 3px rgba(255, 255, 255, 0.5)",
+                "0px 0px 5px rgba(0, 255, 161, 0.8)",
+                "1px -1px 10px rgba(255, 0, 0, 0.8)",
+                "-1px 1px 10px rgba(0, 255, 255, 0.8)",
+                "0px 0px 5px rgba(0, 255, 161, 0.8)",
             ],
             transition: {
-                duration: 0.1, // O glitch acontece rapidamente
+                duration: 0.1,
                 repeat: 1,
                 repeatType: "mirror" as "mirror",
                 ease: "easeInOut",
@@ -128,7 +136,7 @@ const Subtitle = () => {
     if (!isVisible) return null;
 
     return (
-        <div className="mt-6">
+        <div className={`${className}`}>
             <motion.h2
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

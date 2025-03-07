@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2 }}
-            className={`fixed top-0 left-0 w-full flex items-center justify-between px-8 py-4 bg-[#2a322f]/20 shadow-2xl z-50 border border-gray-700/30 ${className}`}>
+            className={`fixed top-0 left-0 w-full flex items-center justify-between px-8 py-2 bg-[#2a322f]/50 shadow-2xl z-50 border border-gray-700/30 ${className}`}>
             <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center">
                     <span className="text-gray-400 text-sm">LOGO</span>
@@ -44,9 +44,9 @@ const Header: React.FC<HeaderProps> = ({ className = "" }) => {
             </nav>
             <Link href="/login">
                 <Button
-                   
+                    href="#"
+                    text="Login CamelTeam"
                 >
-                    Login CamelTeam
                 </Button>
             </Link>
         </motion.header>
