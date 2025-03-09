@@ -3,7 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-const Globe: React.FC = () => {
+interface GlobeProps {
+    className?: string;
+}
+
+const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -133,7 +137,7 @@ const Globe: React.FC = () => {
         };
     }, []);
 
-    return <div ref={containerRef} className="absolute bottom-[-1000px] right-[-950px] w-[2000px] h-[2000px] z-10" />;
+    return <div ref={containerRef} className={` ${className}`} />;
 };
 
 export default Globe;

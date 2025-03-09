@@ -60,6 +60,14 @@ export default function BlobCursor({
         };
     }, [handleMove]);
 
+    // Atualiza o cursor do usuário conforme o estado do blobcursor
+    useEffect(() => {
+        document.body.style.cursor = isOverElement ? "auto" : "none";
+        return () => {
+            document.body.style.cursor = "auto";
+        };
+    }, [isOverElement]);
+
     // 🔹 Tamanhos ajustados para um formato mais fluido e natural
     const normalSize = 50;
     const smallSize = 10;
@@ -106,7 +114,6 @@ export default function BlobCursor({
                             }}
                         />
                     ))}
-
                 </div>
             </div>
         </div>

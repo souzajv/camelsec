@@ -16,6 +16,8 @@ interface SquaresProps {
     squareSize?: number;
     hoverFillColor?: CanvasStrokeStyle;
     children?: React.ReactNode;
+    className?: string;
+    id?: string;
 }
 
 const Squares: React.FC<SquaresProps> = ({
@@ -25,6 +27,8 @@ const Squares: React.FC<SquaresProps> = ({
     squareSize = 40,
     hoverFillColor = "#00ffa1",
     children = null,
+    className = "",
+    id = "",
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const requestRef = useRef<number | null>(null);
@@ -112,7 +116,7 @@ const Squares: React.FC<SquaresProps> = ({
     }, [direction, speed, borderColor, hoverFillColor, squareSize]);
 
     return (
-        <div className="relative w-screen h-screen">
+        <div id={id} className={` ${className}`}>
             <canvas ref={canvasRef} className="absolute inset-0 z-[-1] w-full h-full" />
             {children}
         </div>
