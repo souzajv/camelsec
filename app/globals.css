@@ -8,14 +8,18 @@ body {
     transition: cursor 0.3s ease-in-out;
 }
 
-.subtle-neon {
+.title-neon {
+    text-shadow: 0 0 3px #00ffa1, 0 0 6px #00ffa1;
+}
+
+.subtile-neon:hover {
     text-shadow: 0 0 3px #00ffa1, 0 0 6px #00ffa1;
 }
 
 /* From Uiverse.io by Galahhad */
 .ui-btn {
     --btn-default-bg: rgb(41, 41, 41);
-    --btn-padding: 15px 20px;
+    --btn-padding: 5px 10px;
     --btn-hover-bg: rgb(51, 51, 51);
     --btn-transition: .3s;
     --btn-letter-spacing: .1rem;
@@ -24,15 +28,11 @@ body {
     --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
     --hover-btn-color: #00ffa1;
     --default-btn-color: #ffffff98;
-    --font-size: 16px;
-    /* 👆 this field should not be empty */
-    --font-weight: 600;
-    --font-family: JetBrains_Mono, monospace;
-    /* 👆 this field should not be empty */
+    --font-size: 12px;
+
 }
 
-/* button settings 👆 */
-
+/* Botão settings (permanece inalterado) */
 .ui-btn {
     box-sizing: border-box;
     padding: var(--btn-padding);
@@ -40,14 +40,14 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--default-btn-color);
-    font: var(--font-weight) var(--font-size) var(--font-family);
+    font: var(--font-size) var(--font-family);
     background: transparent;
     border: none;
     cursor: pointer;
     transition: var(--btn-transition);
     overflow: hidden;
     box-shadow: var(--btn-shadow);
-    border: 1px solid #ffffff80
+    border: 2px solid #ffffff80;
 }
 
 .ui-btn span {
@@ -68,7 +68,7 @@ body {
 .ui-btn:hover,
 .ui-btn:focus {
     background: transparent;
-    border: 1px solid var(--hover-btn-color);
+    border: 2px solid var(--hover-btn-color);
     box-shadow: 0 0 10px #00ffa1;
 }
 
@@ -83,6 +83,63 @@ body {
     animation: chitchat linear both var(--btn-animation-duration);
 }
 
+.ui-nav {
+    --nav-default-bg: rgb(41, 41, 41);
+    --nav-hover-bg: rgb(51, 51, 51);
+    --nav-transition: .3s;
+    --nav-letter-spacing: .1rem;
+    --nav-animation-duration: 1.2s;
+    --nav-shadow: 0 2px 10px 0 var(--nav-shadow-color);
+    --hover-nav-color: #00ffa1;
+    --default-nav-color: #ffffff;
+    --font-size: 16px;
+    --font-weight: 600;
+    --font-family: JetBrains_Mono, monospace;
+}
+
+/* Botão settings (permanece inalterado) */
+.ui-nav {
+    box-sizing: border-box;
+    padding: var(--nav-padding);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--default-nav-color);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: var(--nav-transition);
+    overflow: hidden;
+    box-shadow: var(--nav-shadow);
+    background: transparent !important;
+}
+
+.ui-nav span {
+    letter-spacing: var(--nav-letter-spacing);
+    transition: var(--nav-transition);
+    box-sizing: border-box;
+    position: relative;
+    background: transparent !important;
+}
+
+.ui-nav span::before {
+    position: absolute;
+    content: "";
+    background: transparent !important;
+}
+
+.ui-nav:hover span,
+.ui-nav:focus span {
+    background: transparent !important;
+}
+
+.ui-nav:hover span::before,
+.ui-nav:focus span::before {
+    animation: chitchat linear both var(--nav-animation-duration);
+    background: transparent !important;
+}
+
+/* Animação chitchat para letras aleatórias */
 @keyframes chitchat {
     0% {
         content: "#";
@@ -180,16 +237,16 @@ body {
 
 /* Loader SVG */
 .loader {
-    width: 14em;
-    height: 14em;
+    width: 8em;
+    height: 8em;
 }
 
-/* Contorno neon mais intenso e efeito de dissolução */
+/* Contorno neon e efeito de dissolução para o loader */
 .loader path {
-    stroke-dasharray: 500;
-    stroke-dashoffset: 0;
-    animation: dashArray 3s ease-in-out infinite, dashOffset 3s linear infinite;
-    filter: drop-shadow(0px 0px 18px #00ffa1);
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 500;
+    animation: dashArray 3s ease-in-out infinite, dashOffset 3s linear infinite, neonPulse 3s ease-in-out infinite;
+    filter: drop-shadow(0px 0px 18px #00ffa1) drop-shadow(0px 0px 36px #00ffa1);
 }
 
 /* Animação do traçado */
@@ -210,10 +267,22 @@ body {
 /* Animação do deslocamento do traçado */
 @keyframes dashOffset {
     0% {
-        stroke-dashoffset: 500;
+        stroke-dashoffset: 1500;
     }
 
     100% {
-        stroke-dashoffset: 0;
+        stroke-dashoffset: 500;
+    }
+}
+
+@keyframes neonPulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0px 0px 18px #00ffa1) drop-shadow(0px 0px 36px #00ffa1);
+    }
+
+    50% {
+        filter: drop-shadow(0px 0px 25px #00ffa1) drop-shadow(0px 0px 45px #00ffa1);
     }
 }

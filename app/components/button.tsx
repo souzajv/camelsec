@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 
 interface CyberButtonProps {
@@ -9,11 +8,12 @@ interface CyberButtonProps {
 
 const CyberButton: React.FC<CyberButtonProps> = ({ text, href = "#", className = "" }) => {
     return (
-        <button 
-        
-        className="ui-btn">
-            <span>
-                Login Camel<span className="text-techGreen drop-shadow-[0_0_10px_#00ffa1]">Team</span>
+        <button className="ui-btn">
+            <span className="!font-light">
+                Login Camel
+                <span className="text-techGreen drop-shadow-[0_0_10px_#00ffa1]">
+                    Team
+                </span>
             </span>
         </button>
     );

@@ -132,7 +132,7 @@ const DecayCard: React.FC<DecayCardProps> = ({
     return (
         <div
             ref={svgRef}
-            className={`${className} bg-[#2a322f]/50`}
+            className={`${className} bg-[#2a322f]/50 shadow-2xl`}
             style={{ width: `${width}px`, height: `${height}px` }}
         >
             <svg

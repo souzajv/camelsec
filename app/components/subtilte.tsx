@@ -75,7 +75,7 @@ const Subtitle: React.FC<SubtitleProps> = ({ className = "" }) => {
                     const newTriggers = [...prev];
                     newTriggers[index] = true;
 
-                    // Após o glitch, a palavra ficará techGreen por 1.5s
+                    // Após o glitch, a palavra ficará techGreen por 0.7s
                     setTimeout(() => {
                         newTriggers[index] = false;
                         setGlitchTriggers([...newTriggers]);
@@ -88,7 +88,7 @@ const Subtitle: React.FC<SubtitleProps> = ({ className = "" }) => {
                             setTimeout(() => {
                                 newHighlight[index] = false;
                                 setHighlightTriggers([...newHighlight]);
-                            }, 1500); // TechGreen dura 1.5s
+                            }, 700); // TechGreen dura 0.7s
 
                             return newHighlight;
                         });

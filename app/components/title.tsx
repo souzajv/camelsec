@@ -30,6 +30,21 @@ const Title = ({ setTriggerStart }: TitleProps) => {
         let currentWordIndex = 0;
         let currentCharIndex = 0;
 
+        // Adicionar intervalo para embaralhamento contínuo
+        const shuffleInterval = setInterval(() => {
+            if (!animationFinished) {
+                const newText = [...currentText];
+                for (let i = currentWordIndex; i < fullText.length; i++) {
+                    const word = fullText[i];
+                    const startIndex = i === currentWordIndex ? currentCharIndex : 0;
+                    newText[i] = word.split("").map((char, index) =>
+                        index < startIndex ? char : charset[Math.floor(Math.random() * charset.length)]
+                    ).join("");
+                }
+                setDisplayedText(newText);
+            }
+        }, 500); // Aqui você controla a velocidade do embaralhamento (em milissegundos)
+
         const animateWord = () => {
             if (currentWordIndex >= fullText.length) {
                 setAnimationFinished(true);
@@ -56,6 +71,8 @@ const Title = ({ setTriggerStart }: TitleProps) => {
         };
 
         animateWord();
+
+        return () => clearInterval(shuffleInterval);
     }, []);
 
     useEffect(() => {
@@ -66,7 +83,7 @@ const Title = ({ setTriggerStart }: TitleProps) => {
         return () => clearInterval(cursorInterval);
     }, []);
 
-    // 🔹 Configuração do efeito de glitch para palavras específicas
+    // Configuração do efeito de glitch para palavras específicas
     const glitchVariants = {
         normal: { x: 0, y: 0, textShadow: "0px 0px 5px rgba(0, 255, 161, 0.8)" },
         glitch: {
@@ -97,11 +114,7 @@ const Title = ({ setTriggerStart }: TitleProps) => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="text-white font-light text-6xl text-start tracking-tight w-full uppercase"
-            >
-                {/* Segurança (Neon) */}
-                <span className="text-techGreen subtle-neon">{displayedText[0]}</span>{" "}
-
-                {/* não (Glitch) */}
+            >                <span className="text-techGreen title-neon">{displayedText[0]}</span>{" "}
                 <motion.span
                     variants={glitchVariants}
                     initial="normal"
@@ -110,8 +123,6 @@ const Title = ({ setTriggerStart }: TitleProps) => {
                 >
                     {displayedText[1]}
                 </motion.span>{" "}
-
-                {/* traz (Glitch) */}
                 <motion.span
                     variants={glitchVariants}
                     initial="normal"
@@ -120,8 +131,6 @@ const Title = ({ setTriggerStart }: TitleProps) => {
                 >
                     {displayedText[2]}
                 </motion.span>{" "}
-
-                {/* estresse (Glitch) */}
                 <motion.span
                     variants={glitchVariants}
                     initial="normal"
@@ -130,10 +139,7 @@ const Title = ({ setTriggerStart }: TitleProps) => {
                 >
                     {displayedText[3]}
                 </motion.span>{" "}
-
                 <br />
-
-                {/* traz (Glitch) */}
                 <motion.span
                     variants={glitchVariants}
                     initial="normal"
@@ -142,12 +148,8 @@ const Title = ({ setTriggerStart }: TitleProps) => {
                 >
                     {displayedText[4]}
                 </motion.span>{" "}
-
-                {/* resultado (Neon) */}
-                <span className="text-techGreen subtle-neon">{displayedText[5]}</span>
-
-                {/* Cursor piscando */}
-                <span className="blinking-cursor opacity-100 transition-opacity duration-500">
+                <span className="text-techGreen title-neon">{displayedText[5]}</span>
+                <span className="blinking-cursor opacity-100 transition-opacity duration-400">
                     {showCursor ? "|" : ""}
                 </span>
             </motion.h1>

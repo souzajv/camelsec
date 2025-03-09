@@ -49,12 +49,12 @@ const Loading = ({ onComplete }: { onComplete: () => void }) => {
     }, [onComplete]);
 
     return (
-        <div ref={loadingRef} className="fixed inset-0 flex items-center justify-center bg-[#121a17]">
+        <div ref={loadingRef} className="fixed inset-0 flex items-center justify-center !bg-transparent">
             <svg
                 ref={svgRef}
                 xmlns="http://www.w3.org/2000/svg"
-                width="250"
-                height="300"
+                width="1500"
+                height="1600"
                 viewBox="0 0 769 977"
                 fill="none"
                 className="loader"

@@ -11,6 +11,9 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "CamelSec",
   description: "Não seja um unicórnio, seja um camelo.",
+  icons: {
+    icon: "/favicon.png"
+  }
 };
 
 export default function RootLayout({
