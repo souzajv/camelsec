@@ -12,11 +12,18 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
 
     useEffect(() => {
         if (!containerRef.current) return;
+
+        // Limpa o container removendo quaisquer elementos filhos (evita duplicação)
+        while (containerRef.current.firstChild) {
+            containerRef.current.removeChild(containerRef.current.firstChild);
+        }
+
         const width = containerRef.current.clientWidth;
         const height = containerRef.current.clientHeight;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        camera.position.z = 600;
 
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
@@ -26,23 +33,19 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
         renderer.setSize(width, height);
         containerRef.current.appendChild(renderer.domElement);
 
-        // Cria os pontos do globo
+        // Criação dos pontos do globo
         const distance = Math.min(200, width / 4);
         const geometry = new THREE.BufferGeometry();
         const vertices: number[] = [];
-
         for (let i = 0; i < 1600; i++) {
             const theta = THREE.MathUtils.randFloatSpread(360);
             const phi = THREE.MathUtils.randFloatSpread(360);
-
             const x = distance * Math.sin(theta) * Math.cos(phi);
             const y = distance * Math.sin(theta) * Math.sin(phi);
             const z = distance * Math.cos(theta);
-
             vertices.push(x, y, z);
         }
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-
         const particles = new THREE.Points(
             geometry,
             new THREE.PointsMaterial({
@@ -53,23 +56,14 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
 
         const renderingParent = new THREE.Group();
         renderingParent.add(particles);
-
-        // Calcula o tamanho do frustum no plano z = 0
-        const vFOV = (camera.fov * Math.PI) / 180; // conversão para radianos
-        const worldHeight = 2 * Math.tan(vFOV / 2) * camera.position.z;
-        const worldWidth = worldHeight * camera.aspect;
-        // Posiciona o grupo para que seu centro seja o canto inferior esquerdo da projeção
-        renderingParent.position.set(-worldWidth / 2, -worldHeight / 2, 0);
-
+        renderingParent.position.set(0, 0, 0);
         scene.add(renderingParent);
 
-        camera.position.z = 600;
-
-        // Propriedades para rotação contínua e offset do mouse
+        // Propriedades para animação e rotação
         const animProps = { scale: 1, xRot: 0, yRot: 0 };
         const mouseRotation = { x: 0, y: 0 };
 
-        // Tween para efeito de escala pulsante
+        // Tween de escala pulsante
         gsap.to(animProps, {
             duration: 10,
             scale: 1.3,
@@ -81,7 +75,7 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
             },
         });
 
-        // Tween para rotação base contínua
+        // Tween de rotação base contínua
         gsap.to(animProps, {
             duration: 120,
             xRot: Math.PI * 2,
@@ -90,17 +84,25 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
             ease: "none",
         });
 
-        // Atualiza o offset da rotação via mouse
         const onMouseMove = (event: MouseEvent) => {
+            // Verifica se o evento está sendo disparado (ajuda no debug)
+            console.log("Mouse move:", event.clientX, event.clientY);
+
             const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
             const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
+            // Opção 1: Tween com GSAP para transição suave
             gsap.to(mouseRotation, {
-                duration: 2,
+                duration: 0.5,
                 x: mouseY * 0.5,
                 y: mouseX * 0.5,
                 ease: "power1.out",
+                overwrite: true,
             });
+
+            // Opção 2 (para teste): atribuição direta (descomente para testar)
+            // mouseRotation.x = mouseY * 0.5;
+            // mouseRotation.y = mouseX * 0.5;
         };
 
         const onResize = () => {
@@ -116,9 +118,9 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('resize', onResize);
 
-        // Função de animação que combina a rotação base e o offset do mouse
         const animate = () => {
             requestAnimationFrame(animate);
+            // Combina a rotação base com o offset do mouse
             renderingParent.rotation.x = animProps.xRot + mouseRotation.x;
             renderingParent.rotation.y = animProps.yRot + mouseRotation.y;
             renderer.render(scene, camera);
@@ -126,7 +128,6 @@ const Globe: React.FC<GlobeProps> = ({ className = "" }) => {
 
         animate();
 
-        // Cleanup
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('resize', onResize);

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from "react";
 import { Renderer, Camera, Geometry, Program, Mesh } from "ogl";
 
@@ -14,6 +15,7 @@ interface ParticlesProps {
     cameraDistance?: number;
     disableRotation?: boolean;
     className?: string;
+    children?: React.ReactNode;
 }
 
 const defaultColors: string[] = ["#ffffff", "#ffffff", "#ffffff"];
@@ -77,6 +79,7 @@ const fragment = /* glsl */ `
     vec2 uv = gl_PointCoord.xy;
     float d = length(uv - vec2(0.5));
     
+    // Partículas em círculo / fade se alphaParticles == true
     if(uAlphaParticles < 0.5) {
       if(d > 0.5) {
         discard;
@@ -90,7 +93,7 @@ const fragment = /* glsl */ `
 `;
 
 const Particles: React.FC<ParticlesProps> = ({
-    particleCount = 600,
+    particleCount = 800,
     particleSpread = 10,
     speed = 0.1,
     particleColors = ["#00ffa1"],
@@ -102,17 +105,28 @@ const Particles: React.FC<ParticlesProps> = ({
     cameraDistance = 20,
     disableRotation = false,
     className,
+    children,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
+        // Cria o renderer OGL
         const renderer = new Renderer({ depth: false, alpha: true });
         const gl = renderer.gl;
+        // Ajusta estilo do canvas: z-0 e posição absoluta
+        gl.canvas.style.position = "absolute";
+        gl.canvas.style.top = "0";
+        gl.canvas.style.left = "0";
+        gl.canvas.style.width = "100%";
+        gl.canvas.style.height = "100%";
+        gl.canvas.style.zIndex = "0";
         container.appendChild(gl.canvas);
+
         gl.clearColor(0, 0, 0, 0);
 
         const camera = new Camera(gl, { fov: 15 });
@@ -155,6 +169,7 @@ const Particles: React.FC<ParticlesProps> = ({
             const r = Math.cbrt(Math.random());
             positions.set([x * r, y * r, z * r], i * 3);
             randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
+
             const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
             colors.set(col, i * 3);
         }
@@ -233,13 +248,19 @@ const Particles: React.FC<ParticlesProps> = ({
         sizeRandomness,
         cameraDistance,
         disableRotation,
+        // note: className & children are not used in effect
     ]);
 
     return (
-        <div
-            ref={containerRef}
-            className={`relative w-full h-full ${className}`}
-        />
+        <div ref={containerRef} className={`relative w-full h-full ${className || ""}`}>
+            {/* 
+        Wrapper para os filhos com zIndex maior 
+        de modo que apareçam sobre o canvas
+      */}
+            <div className="relative z-10 w-full h-full">
+                {children}
+            </div>
+        </div>
     );
 };
 
